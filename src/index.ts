@@ -1,5 +1,5 @@
-import compilerCreator from './compiler'
+import { createCompiler } from './compiler'
 
-const meikoCompiler = compilerCreator()
+const meikoCompiler = createCompiler()
 
 export { meikoCompiler }
