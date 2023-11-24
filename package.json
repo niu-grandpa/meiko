@@ -6,8 +6,8 @@
   "packageManager": "pnpm@8.5.0",
   "main": "dist/meiko.cjs",
   "module": "dist/meiko.mjs",
-  "unpkg": "dist/meiko.js",
-  "jsdelivr": "dist/meiko.js",
+  "unpkg": "dist/meiko.umd.js",
+  "jsdelivr": "dist/meiko.umd.js",
   "files": [
     "src/",
     "dist/*.js"
@@ -18,7 +18,7 @@
         "node": "./dist/meiko.cjs",
         "default": "./dist/meiko.mjs"
       },
-      "require": "./dist/meiko.cjs",
+      "require": "./dist/meiko.umd.cjs",
       "types": "./types/index.d.ts"
     },
     "./dist/*": "./dist/*",
@@ -72,6 +72,7 @@
     "lint-staged": "^15.1.0",
     "prettier": "^3.1.0",
     "rollup": "^4.5.0",
+    "rollup-plugin-polyfill-node": "^0.13.0",
     "rollup-plugin-terser": "^7.0.2",
     "rollup-plugin-typescript2": "^0.36.0",
     "ts-jest": "^29.1.1",
