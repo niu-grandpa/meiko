@@ -11,4 +11,4 @@ export const LF_DCB = '{{'
 /**D 表示 Double, CB 表示 CURLY_BRACES */
 export const RT_DCB = '}}'
 /**插值表达式钦定的标签名 */
-export const INTERP_HTML_TAGNAME = 'mio-interp'
+export const INTERP_HTML_TAGNAME = 'meiko-value'
