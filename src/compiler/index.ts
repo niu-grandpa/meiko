@@ -1,1 +1,1 @@
-export { createCompiler, createContext, createInterpTag } from './creator'
+export { createCompiler, createContext } from './creator'
