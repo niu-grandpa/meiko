@@ -1,4 +1,4 @@
-import { isEqETN, isEqSpace } from '.'
+import { isEqETN, isEqSpace } from '@/helper/equal'
 
 type ParseTagNameResult = {
   jump: number
@@ -6,7 +6,7 @@ type ParseTagNameResult = {
   stopped: boolean
 }
 
-export function parseTagName(
+export default function parseTagName(
   pos: number,
   source: string,
   isClosed = false

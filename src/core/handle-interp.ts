@@ -1,12 +1,12 @@
-import { createInterpTag } from '@/compiler'
-import { getInterpHash } from '@/compiler/creator'
 import { CompilerContext } from '@/compiler/types'
+import createHash from '@/helper/hash'
+import getInterpTag from '@/helper/interp-tag'
 
 export default function handleInterpExpr(
   name: string,
-  context: CompilerContext
+  result: CompilerContext['result']
 ) {
-  const hash = getInterpHash(name)
-  context.result.push(...createInterpTag(hash))
+  const hash = createHash(name)
+  result.push(...getInterpTag(hash))
   // todo 响应式数据关联收集哈希
 }

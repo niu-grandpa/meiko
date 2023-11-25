@@ -1,14 +1,9 @@
 import { CompilerContext } from '@/compiler/types'
 import { CLOSING_SLASH, END_TAG, START_TAG, WHITE_SPACE } from '@/const'
 import handleInterpExpr from '@/core/handle-interp'
-import {
-  isEqCSH,
-  isEqLSCB,
-  isEqSTN,
-  isEqSpace,
-  parseInterpExpr,
-  parseTagName
-} from '.'
+import { isEqCSH, isEqLSCB, isEqSTN, isEqSpace } from '@/helper/equal'
+import parseInterpExpr from './parse-interp'
+import parseTagName from './parse-tag'
 
 export function parseHtml(context: CompilerContext) {
   const { source, stack, result } = context
@@ -61,7 +56,7 @@ export function parseHtml(context: CompilerContext) {
       if (temp.length) {
         addHtmlToken(...temp)
       } else {
-        handleInterpExpr(name, context)
+        handleInterpExpr(name, result)
       }
     } else {
       addHtmlToken(source[i++])

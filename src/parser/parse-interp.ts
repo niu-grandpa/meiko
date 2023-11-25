@@ -1,5 +1,5 @@
 import { CompilerContext } from '@/compiler/types'
-import { isEqRSCB, isEqSTN, isEqSpace } from '.'
+import { isEqRSCB, isEqSTN, isEqSpace } from '@/helper/equal'
 
 type ParseInterExprResult = {
   jump: number
@@ -7,7 +7,7 @@ type ParseInterExprResult = {
   temp: string[]
 }
 
-export function parseInterpExpr(
+export default function parseInterpExpr(
   pos: number,
   context: CompilerContext
 ): ParseInterExprResult {
