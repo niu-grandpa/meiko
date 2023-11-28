@@ -1,7 +1,14 @@
 import { CompilerContext } from '@/compiler/types'
-import { CLOSING_SLASH, END_TAG, START_TAG, WHITE_SPACE } from '@/const'
-import handleInterpExpr from '@/core/handle-interp'
+import {
+  CLOSING_SLASH,
+  END_TAG,
+  ESCAPE_HTML,
+  START_TAG,
+  WHITE_SPACE
+} from '@/const'
 import { isEqCSH, isEqLSCB, isEqSTN, isEqSpace } from '@/helper/equal'
+import getInterpHash from '@/helper/hash'
+import getInterpTag from '@/helper/interp-tag'
 import parseInterpExpr from './parse-interp'
 import parseTagName from './parse-tag'
 
@@ -15,14 +22,13 @@ export function parseHtml(context: CompilerContext) {
   while (i < source.length) {
     // 匹配到开始标签 <div> | </div>
     if (isEqSTN(source[i])) {
-      addHtmlToken(START_TAG)
       let j = i + 1 // -> div> | -> /div>
       // 假如写成这样 < div>
       if (isEqSpace(source[j])) {
-        throw SyntaxError(
-          `html tag names cannot have leading spaces < element>`
-        )
+        addHtmlToken(ESCAPE_HTML.gt)
+        continue
       }
+      addHtmlToken(START_TAG)
       // 匹配到结束斜杠标签
       if (isEqCSH(source[j])) {
         addHtmlToken(CLOSING_SLASH)
@@ -35,28 +41,34 @@ export function parseHtml(context: CompilerContext) {
         i += jump
         addHtmlToken(eTN, END_TAG)
       } else {
-        const { jump, stopped, name } = parseTagName(j, source)
+        const { jump, stopped, name, invalid } = parseTagName(j, source)
         i += jump
         addHtmlToken(name)
-        // 遇到空格结束标签匹配，可能空格后面有元素属性什么的 <div key="value" ...>
-        //                                                   ↑↑ 匹配到空格
-        if (stopped) {
-          addHtmlToken(WHITE_SPACE)
-          // todo 解析属性 添加属性
+        // <....<
+        // ↑    ↑ 匹配无效
+        if (!invalid) {
+          // 遇到空格结束标签匹配，可能空格后面有元素属性什么的 <div key="value" ...>
+          //                                                   ↑↑ 匹配到空格
+          if (stopped) {
+            addHtmlToken(WHITE_SPACE)
+            // todo 解析属性 添加属性
+          }
+          addHtmlToken(END_TAG)
+          addTagStack(name)
         }
-        addHtmlToken(END_TAG)
-        addTagStack(name)
       }
     }
     // 预判下一个为 '{' ，因此 '{{' 成立
     else if (isEqLSCB(source[i]) && isEqLSCB(source[i + 1])) {
-      const { jump, name, temp } = parseInterpExpr((i += 2), context)
+      const { jump, name, temp, invalid } = parseInterpExpr((i += 2), context)
       i += jump
       // 说明匹配到了结束标签 '>'，而不是 '}}'
-      if (temp.length) {
+      if (invalid) {
         addHtmlToken(...temp)
       } else {
-        handleInterpExpr(name, result)
+        const hash = getInterpHash(name)
+        result.push(...getInterpTag(hash))
+        // todo 响应式数据关联收集哈希
       }
     } else {
       addHtmlToken(source[i++])
