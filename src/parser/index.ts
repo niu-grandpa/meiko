@@ -1,1 +1,1 @@
-export { parseHtml } from './parse-html'
+export { parseHtml } from './parseHtml'
