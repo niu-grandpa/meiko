@@ -3,6 +3,8 @@ import crypto from 'crypto'
 function interpHashCreator() {
   const hashMap = new Map<string, string>()
 
+  let uid = 0
+
   const computeHash = (key: string): string => {
     const md5Hash = crypto.createHash('md5').update(key).digest('hex')
     const firstFour = md5Hash.slice(0, 4)
@@ -15,10 +17,12 @@ function interpHashCreator() {
   }
 
   const creator = (key: string) => {
+    let k = key
     if (hashMap.has(key)) {
-      return hashMap.get(key)!
+      // 同样的键也生成不同的哈希值，这样可以避免一个domid对应多个dom节点，需要遍历
+      k = `${k}_${uid++}`
     }
-    const hash = computeHash(key)
+    const hash = computeHash(k)
     hashMap.set(key, hash)
     return hash
   }
