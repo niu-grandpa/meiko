@@ -9,8 +9,8 @@ import {
 import { isEqCSH, isEqLSCB, isEqSTN, isEqSpace } from '@/helper/equal'
 import getInterpHash from '@/helper/hash'
 import getInterpTag from '@/helper/interp-tag'
-import parseInterpExpr from './parse-interp'
-import parseTagName from './parse-tag'
+import parseInterpExpr from './parseInterp'
+import parseTagName from './parseTag'
 
 export function parseHtml(context: CompilerContext) {
   const { source, stack, result } = context
