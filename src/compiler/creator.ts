@@ -1,4 +1,5 @@
 import { parseHtml } from '@/parser'
+import checkSize from './sizeCheck'
 import { Compiler, CompilerContext } from './types'
 
 export function createCompiler(): Compiler {
@@ -6,6 +7,7 @@ export function createCompiler(): Compiler {
   const compilerFn = (html: string): CompilerContext => {
     context.source = html.trim()
     parseHtml(context)
+    context.size = checkSize(context.result)
     return context
   }
   return compilerFn
@@ -15,6 +17,7 @@ export function createContext(): CompilerContext {
   return {
     stack: [],
     result: [],
-    source: ''
+    source: '',
+    size: '0'
   }
 }
