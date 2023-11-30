@@ -7,11 +7,13 @@ test('编译只含有插值语法的模板', () => {
     path.resolve(__dirname, './template.html'),
     'utf8'
   )
-  const { result } = meikoCompiler(template)
+  const { result, size } = meikoCompiler(template)
 
   writeFileSync(
     path.resolve(__dirname, './build.html'),
     result.join(''),
     'utf8'
   )
+
+  console.log(size)
 })
