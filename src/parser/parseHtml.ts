@@ -1,14 +1,16 @@
 import { CompilerContext } from '@/compiler/types'
+import { isEqCSH, isEqLSCB, isEqSTN, isEqSpace } from '@/helper/equal'
+import getInterpHash from '@/helper/hash'
+import domIdDepMap from '@/reactivity/dep'
 import {
   CLOSING_SLASH,
   END_TAG,
   ESCAPE_HTML,
   START_TAG,
   WHITE_SPACE
-} from '@/const'
-import { isEqCSH, isEqLSCB, isEqSTN, isEqSpace } from '@/helper/equal'
-import getInterpHash from '@/helper/hash'
-import getInterpTag from '@/helper/interp-tag'
+} from '@/shared/const'
+import getInterpTag from '@/shared/customTag'
+import { escapeHtml } from '@/shared/escapeHtml'
 import parseInterpExpr from './parseInterp'
 import parseTagName from './parseTag'
 
@@ -21,16 +23,16 @@ export function parseHtml(context: CompilerContext) {
   let i = 0
   while (i < source.length) {
     // 匹配到开始标签 <div> | </div>
-    if (isEqSTN(source[i])) {
+    if (isEqSTN(source.charAt(i))) {
       let j = i + 1 // -> div> | -> /div>
       // 假如写成这样 < div>
-      if (isEqSpace(source[j])) {
-        addHtmlToken(ESCAPE_HTML.gt)
+      if (isEqSpace(source.charAt(j))) {
+        addHtmlToken(ESCAPE_HTML.lt)
         continue
       }
       addHtmlToken(START_TAG)
       // 匹配到结束斜杠标签
-      if (isEqCSH(source[j])) {
+      if (isEqCSH(source.charAt(j))) {
         addHtmlToken(CLOSING_SLASH)
         const sTN = stack.pop()
         const { jump, name: eTN } = parseTagName(j + 1, source, true)
@@ -59,7 +61,7 @@ export function parseHtml(context: CompilerContext) {
       }
     }
     // 预判下一个为 '{' ，因此 '{{' 成立
-    else if (isEqLSCB(source[i]) && isEqLSCB(source[i + 1])) {
+    else if (isEqLSCB(source.charAt(i)) && isEqLSCB(source.charAt(i + 1))) {
       const { jump, name, temp, invalid } = parseInterpExpr((i += 2), context)
       i += jump
       // 说明匹配到了结束标签 '>'，而不是 '}}'
@@ -68,10 +70,11 @@ export function parseHtml(context: CompilerContext) {
       } else {
         const hash = getInterpHash(name)
         result.push(...getInterpTag(hash))
-        // todo 响应式数据关联收集哈希
+        domIdDepMap.add(name, hash)
       }
     } else {
-      addHtmlToken(source[i++])
+      const string = escapeHtml(source.charAt(i++))
+      addHtmlToken(string)
     }
   }
 }

@@ -1,5 +1,6 @@
 import { CompilerContext } from '@/compiler/types'
 import { isEqRSCB, isEqSTN, isEqSpace } from '@/helper/equal'
+import { escapeHtml } from '@/shared/escapeHtml'
 
 type ParseInterExprResult = {
   jump: number
@@ -40,7 +41,7 @@ export default function parseInterpExpr(
     if (ch || !isEqSpace(ch)) {
       interpName += ch
     }
-    data.temp.push(source.charAt(pos++))
+    data.temp.push(escapeHtml(source.charAt(pos++)))
   }
 
   if (!data.invalid) {

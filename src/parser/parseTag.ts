@@ -1,5 +1,6 @@
-import { ESCAPE_HTML } from '@/const'
 import { isEqETN, isEqSTN, isEqSpace } from '@/helper/equal'
+import { ESCAPE_HTML } from '@/shared/const'
+import { escapeHtml } from '@/shared/escapeHtml'
 
 type ParseTagNameResult = {
   jump: number
@@ -32,7 +33,7 @@ export default function parseTagName(
       data.stopped = true
       break
     }
-    data.name += source.charAt(pos++)
+    data.name += escapeHtml(source.charAt(pos++))
   }
   // 当前指针结束于 '>'，因此还要往前移一位
   // 如果是闭合标签，exp: </div>，则指针会停留在 'v' 的位置，因此需要前移两位
