@@ -5,7 +5,7 @@ import {
   RT_SCB,
   START_TAG,
   WHITE_SPACE
-} from '@/const'
+} from '@/shared/const'
 
 export function isEqSTN(value: string) {
   return value === START_TAG
