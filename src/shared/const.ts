@@ -28,3 +28,5 @@ export const enum ESCAPE_HTML {
   amp = '&amp;', // &
   quot = '&quot;' // "
 }
+
+export const isProxyKey = '__m_isProxy__'
