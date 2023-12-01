@@ -13,6 +13,9 @@ dependencies:
   '@rollup/plugin-commonjs':
     specifier: ^25.0.7
     version: registry.npmmirror.com/@rollup/plugin-commonjs@25.0.7(rollup@4.5.0)
+  '@rollup/plugin-json':
+    specifier: ^6.0.1
+    version: registry.npmmirror.com/@rollup/plugin-json@6.0.1(rollup@4.5.0)
   '@rollup/plugin-node-resolve':
     specifier: ^15.2.3
     version: registry.npmmirror.com/@rollup/plugin-node-resolve@15.2.3(rollup@4.5.0)
@@ -1003,6 +1006,22 @@ packages:
       '@rollup/pluginutils': registry.npmmirror.com/@rollup/pluginutils@5.0.5(rollup@4.5.0)
       estree-walker: registry.npmmirror.com/estree-walker@2.0.2
       magic-string: registry.npmmirror.com/magic-string@0.30.5
+      rollup: registry.npmmirror.com/rollup@4.5.0
+    dev: false
+
+  registry.npmmirror.com/@rollup/plugin-json@6.0.1(rollup@4.5.0):
+    resolution: {integrity: sha512-RgVfl5hWMkxN1h/uZj8FVESvPuBJ/uf6ly6GTj0GONnkfoBN5KC0MSz+PN2OLDgYXMhtG0mWpTrkiOjoxAIevw==, registry: https://registry.npm.taobao.org/, tarball: https://registry.npmmirror.com/@rollup/plugin-json/-/plugin-json-6.0.1.tgz}
+    id: registry.npmmirror.com/@rollup/plugin-json/6.0.1
+    name: '@rollup/plugin-json'
+    version: 6.0.1
+    engines: {node: '>=14.0.0'}
+    peerDependencies:
+      rollup: ^1.20.0||^2.0.0||^3.0.0||^4.0.0
+    peerDependenciesMeta:
+      rollup:
+        optional: true
+    dependencies:
+      '@rollup/pluginutils': registry.npmmirror.com/@rollup/pluginutils@5.0.5(rollup@4.5.0)
       rollup: registry.npmmirror.com/rollup@4.5.0
     dev: false
 
