@@ -1,7 +1,6 @@
 import { CompilerContext } from '@/compiler/types'
 import { isEqCSH, isEqLSCB, isEqSTN, isEqSpace } from '@/helper/equal'
 import getInterpHash from '@/helper/hash'
-import domIdDepMap from '@/reactivity/dep'
 import {
   CLOSING_SLASH,
   END_TAG,
@@ -10,6 +9,7 @@ import {
   WHITE_SPACE
 } from '@/shared/const'
 import getInterpTag from '@/shared/customTag'
+import { DomSubscribe } from '@/shared/dep'
 import { escapeHtml } from '@/shared/escapeHtml'
 import parseInterpExpr from './parseInterp'
 import parseTagName from './parseTag'
@@ -68,9 +68,9 @@ export function parseHtml(context: CompilerContext) {
       if (invalid) {
         addHtmlToken(...temp)
       } else {
-        const hash = getInterpHash(name)
-        result.push(...getInterpTag(hash))
-        domIdDepMap.add(name, hash)
+        const domId = getInterpHash(name)
+        DomSubscribe.add(name, domId)
+        result.push(...getInterpTag(domId))
       }
     } else {
       const string = escapeHtml(source.charAt(i++))
