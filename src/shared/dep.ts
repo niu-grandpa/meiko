@@ -17,7 +17,7 @@ class DomDepSubscribe {
   }
 
   get(key: string) {
-    if (!isNull(this.has(key))) return null
+    if (isNull(this.has(key))) return null
     return this.map[key]
   }
 
