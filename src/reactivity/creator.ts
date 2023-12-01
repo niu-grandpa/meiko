@@ -1,3 +1,4 @@
+import { isProxyKey } from '@/shared/const'
 import { ProxyContext, proxyGetter, proxySetter } from './proxyHandler'
 
 const proxyMap = new WeakMap()
@@ -13,8 +14,17 @@ export function createProxy<T extends object>(
   modelName: string,
   context?: ProxyContext
 ): T {
+  if (target.hasOwnProperty(isProxyKey)) {
+    return target
+  }
   if (!proxyMap.has(target)) {
     const proxyObject = new Proxy(target, createHandler(modelName, context))
+    Object.defineProperty(proxyObject, isProxyKey, {
+      configurable: true,
+      enumerable: false,
+      writable: false,
+      value: true
+    })
     proxyMap.set(target, proxyObject)
   }
   return proxyMap.get(target) as T
