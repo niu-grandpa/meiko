@@ -1,6 +1,7 @@
 import { CompilerContext } from '@/compiler/types'
 import { isEqCSH, isEqLSCB, isEqSTN, isEqSpace } from '@/helper/equal'
 import getInterpHash from '@/helper/hash'
+import { DomSubscribe } from '@/reactivity/dep'
 import {
   CLOSING_SLASH,
   END_TAG,
@@ -9,7 +10,6 @@ import {
   WHITE_SPACE
 } from '@/shared/const'
 import getInterpTag from '@/shared/customTag'
-import { DomSubscribe } from '@/shared/dep'
 import { escapeHtml } from '@/shared/escapeHtml'
 import parseInterpExpr from './parseInterp'
 import parseTagName from './parseTag'
