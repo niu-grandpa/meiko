@@ -13,7 +13,7 @@ export function createCompiler(): Compiler {
   return compilerFn
 }
 
-export function createContext(): CompilerContext {
+function createContext(): CompilerContext {
   return {
     stack: [],
     result: [],
