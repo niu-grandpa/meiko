@@ -1,5 +1,4 @@
 {
-  "type": "module",
   "name": "meiko",
   "version": "1.0.0",
   "description": "",
@@ -26,7 +25,9 @@
     "./package.json": "./package.json"
   },
   "scripts": {
-    "build": "rollup -c",
+    "build": "npm run build:dev && npm run build:prod",
+    "build:dev": "rollup -c ./build/dev.js",
+    "build:prod": "rollup -c ./build/prod.js",
     "build-dts": "tsc -p tsconfig.build.json",
     "test": "jest",
     "lint": "eslint .",
