@@ -1,1 +1,1 @@
-export { createCompiler, createContext } from './creator'
+export { createCompiler } from './creator'
