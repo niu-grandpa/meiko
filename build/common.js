@@ -1,38 +1,41 @@
-import babel from '@rollup/plugin-babel'
-import commonjs from '@rollup/plugin-commonjs'
-import json from '@rollup/plugin-json'
-import resolve from '@rollup/plugin-node-resolve'
+const alias = require('@rollup/plugin-alias')
+const babel = require('@rollup/plugin-babel')
+const commonjs = require('@rollup/plugin-commonjs')
+const json = require('@rollup/plugin-json')
+const resolve = require('@rollup/plugin-node-resolve')
+const nodePolyfills = require('rollup-plugin-polyfill-node')
+const typescript = require('rollup-plugin-typescript2')
 
-export const createOutput = (suffix, format, options = {}) => {
+const createOutput = (suffix, format, options = {}) => {
   const obj = {
     file: `dist/meiko.${suffix}`,
-    format: format ?? suffix,
+    format: format || suffix,
     name: 'Meiko'
   }
   return Object.assign(obj, options)
 }
 
-export const mergeConfig = (target, source) => {
-  for (const key in target) {
-    const value = target[key]
-    if (Array.isArray(value)) {
-      source[key] = [...value, ...source[key]]
-    } else {
-      source[key] = target[key]
-    }
-  }
-  return source
+const mergeConfig = (config1, config2) => {
+  return Object.assign({}, config2, config1, {
+    plugins: config1.plugins.concat(config2.plugins)
+  })
 }
 
-export const commonConfig = {
+const baseConfig = {
   input: 'src/index.ts',
   plugins: [
     commonjs(),
     resolve(),
-    json(),
     babel({ exclude: 'node_modules/**', babelHelpers: 'bundled' }),
     typescript(),
     alias({ entries: [{ find: '@', replacement: './src' }] }),
+    json(),
     nodePolyfills()
   ]
+}
+
+module.exports = {
+  createOutput: createOutput,
+  mergeConfig: mergeConfig,
+  baseConfig: baseConfig
 }

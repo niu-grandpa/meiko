@@ -1,11 +1,11 @@
-import { commonConfig, createOutput, mergeConfig } from './common'
+const { baseConfig, createOutput, mergeConfig } = require('./common.js')
 
-const devConfig = mergeConfig(commonConfig, {
+const devConfig = mergeConfig(baseConfig, {
   output: [
-    createOutput('js', 'umd'),
-    createOutput('esm.js', 'esm'),
-    createOutput('common.js', 'cjs', { exports: 'auto' })
+    createOutput('js', 'umd', { sourcemap: true }),
+    createOutput('esm.js', 'esm', { sourcemap: true }),
+    createOutput('common.js', 'cjs', { exports: 'auto', sourcemap: true })
   ]
 })
 
-export default devConfig
+module.exports = devConfig

@@ -1,13 +1,13 @@
-import { terser } from '@rollup/plugin-terser'
-import { commonConfig, createOutput, mergeConfig } from './common'
+const terser = require('@rollup/plugin-terser')
+const { baseConfig, createOutput, mergeConfig } = require('./common.js')
 
-const prodConfig = mergeConfig(commonConfig, {
+const prodConfig = mergeConfig(baseConfig, {
   output: [
     createOutput('min.js', 'umd'),
     createOutput('esm.min.js', 'esm'),
     createOutput('common.min.js', 'cjs', { exports: 'auto' })
   ],
-  plugins: [terser({ sourceMap: true })]
+  plugins: [terser()]
 })
 
-export default prodConfig
+module.exports = prodConfig
