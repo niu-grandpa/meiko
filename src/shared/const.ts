@@ -29,4 +29,10 @@ export const enum ESCAPE_HTML {
   quot = '&quot;' // "
 }
 
-export const isProxyKey = '__m_isProxy__'
+export const enum ReactiveFlags {
+  SKIP = '__m_skip',
+  IS_REACTIVE = '__m_isReactive',
+  IS_READONLY = '__m_isReadonly',
+  IS_SHALLOW = '__m_isShallow',
+  RAW = '__m_raw'
+}
