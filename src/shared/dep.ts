@@ -1,23 +1,22 @@
-import { isNull } from '@/helper/equal'
+import { isNull, isUndef } from '@/helper/equal'
 
 let DomSubscribe: DomDepSubscribe
 
 function createSubscribe() {
-  if (!DomSubscribe) {
+  if (isUndef(DomSubscribe)) {
     DomSubscribe = new DomDepSubscribe()
   }
-  return DomSubscribe
 }
 
 class DomDepSubscribe {
   private map: Record<string, Set<string>> = Object.create(null)
 
   private has(key: string) {
-    return key in this.map
+    return !isUndef(this.map[key])
   }
 
   get(key: string) {
-    if (isNull(this.has(key))) return null
+    if (!this.has(key)) return
     return this.map[key]
   }
 
@@ -30,7 +29,7 @@ class DomDepSubscribe {
 
   removeOne(key: string, id: string) {
     const ids = this.get(key)
-    if (isNull(ids)) return
+    if (isUndef(ids)) return
     ids.delete(id)
     if (ids.size === 0) {
       this.removeAll(key)
