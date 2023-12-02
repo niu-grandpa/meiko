@@ -1,8 +1,10 @@
+import { Target } from '@/reactivity/creator'
 import {
   CLOSING_SLASH,
   END_TAG,
   LF_SCB,
   RT_SCB,
+  ReactiveFlags,
   START_TAG,
   WHITE_SPACE
 } from '@/shared/const'
@@ -83,4 +85,11 @@ export function isEqual(a: any, b: any): boolean {
   }
 
   return false
+}
+
+export function isReactive(target: Target) {
+  return (
+    !isUndef(target.hasOwnProperty(ReactiveFlags.IS_REACTIVE)) &&
+    target[ReactiveFlags.IS_REACTIVE]
+  )
 }
