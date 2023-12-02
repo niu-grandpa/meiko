@@ -1,5 +1,14 @@
-import { isProxyKey } from '@/shared/const'
+import { isReactive } from '@/helper/equal'
+import { ReactiveFlags } from '@/shared/const'
 import { ProxyContext, proxyGetter, proxySetter } from './proxyHandler'
+
+export interface Target {
+  [ReactiveFlags.SKIP]?: boolean
+  [ReactiveFlags.IS_REACTIVE]?: boolean
+  [ReactiveFlags.IS_READONLY]?: boolean
+  [ReactiveFlags.IS_SHALLOW]?: boolean
+  [ReactiveFlags.RAW]?: any
+}
 
 const proxyMap = new WeakMap()
 
@@ -12,31 +21,28 @@ export function createModel<T extends object>(name: string, data: () => T): T {
 export function createProxy<T extends object>(
   target: T,
   modelName: string,
-  context?: ProxyContext
+  context: ProxyContext
 ): T {
-  if (target.hasOwnProperty(isProxyKey)) {
+  if (isReactive(target)) {
     return target
   }
   if (!proxyMap.has(target)) {
-    const proxyObject = new Proxy(target, createHandler(modelName, context))
-    Object.defineProperty(proxyObject, isProxyKey, {
-      configurable: true,
-      enumerable: false,
-      writable: false,
-      value: true
-    })
-    proxyMap.set(target, proxyObject)
+    const reactiveObject = new Proxy(target, createHandler(modelName, context))
+    markTargetType(reactiveObject, ReactiveFlags.IS_REACTIVE, true)
+    proxyMap.set(target, reactiveObject)
   }
   return proxyMap.get(target) as T
 }
 
 function createHandler<T extends object>(
   modelName: string,
-  context?: ProxyContext
+  context: ProxyContext
 ): ProxyHandler<T> {
+  const base = { context, modelName }
+
   const handler: ProxyHandler<T> = {
     get(target, key, receiver) {
-      return proxyGetter<T>({ target, key, receiver, modelName: '' })
+      return proxyGetter<T>({ target, key, receiver, ...base })
     },
     set(target, key, newValue, receiver) {
       return proxySetter<T>({
@@ -44,11 +50,18 @@ function createHandler<T extends object>(
         key,
         newValue,
         receiver,
-        context,
-        modelName
+        ...base
       })
     }
   }
 
   return handler
+}
+
+function markTargetType(target: object, type: ReactiveFlags, flag: boolean) {
+  Object.defineProperty(target, type, {
+    value: flag,
+    writable: false,
+    configurable: false
+  })
 }
