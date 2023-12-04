@@ -1,10 +1,8 @@
-import { Target } from '@/reactivity/creator'
 import {
   CLOSING_SLASH,
   END_TAG,
   LF_SCB,
   RT_SCB,
-  ReactiveFlags,
   START_TAG,
   WHITE_SPACE
 } from '@/shared/const'
@@ -45,13 +43,12 @@ export function isArray(value: any): value is [] {
   return Array.isArray(value)
 }
 
-export function isObject(value: any): value is object {
-  return (
-    typeof value === 'object' &&
-    !Array.isArray(value) &&
-    typeof value !== 'function' &&
-    value !== null
-  )
+export function isObject(value: any): value is Record<any, any> {
+  return value !== null && typeof value === 'object'
+}
+
+export function isFunction(value: any): value is Function {
+  return Object.prototype.toString.call(value) === '[object Function]'
 }
 
 export function isPlainObject(value: any): boolean {
@@ -85,11 +82,4 @@ export function isEqual(a: any, b: any): boolean {
   }
 
   return false
-}
-
-export function isReactive(target: Target) {
-  return (
-    !isUndef(target.hasOwnProperty(ReactiveFlags.IS_REACTIVE)) &&
-    target[ReactiveFlags.IS_REACTIVE]
-  )
 }
