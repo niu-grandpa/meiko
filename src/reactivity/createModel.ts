@@ -1,7 +1,7 @@
 import { isFunction } from '@/helper/equal'
-import { isReadonly } from '.'
-import { ProxyContext, createProxy } from './proxy'
-import baseHandler from './proxy/baseHandler'
+import { createProxy, ProxyContext } from './proxy'
+import { isReadonly } from './proxy/baseHandler'
+import normalHandler from './proxy/normalHandler'
 
 /**
  *
@@ -18,11 +18,11 @@ import baseHandler from './proxy/baseHandler'
  * state.count // -> 1
  * ```
  */
-export function createModel<T extends object>(name: string, data: () => T): T
+export function createModel<T extends object>(name: string, state: () => T): T
 export function createModel(name: string, state: () => object) {
   if (!isFunction(state)) {
     console.warn(`[Meiko warn]: model cannot be created: ${String(state)}`)
-    return 
+    return state
   }
   const target = state()
   // if target is a readonly proxy, it will be returned directly without observation.
@@ -35,5 +35,5 @@ export function createModel(name: string, state: () => object) {
     isReactive: true,
     isDeep: true
   }
-  return createProxy(target, context, baseHandler(name, context))
+  return createProxy(target, context, normalHandler(name, context))
 }
