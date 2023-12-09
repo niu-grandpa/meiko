@@ -27,13 +27,24 @@ export type CustromProxyHandler<T> = {
 export type ProxyGetter<T> = CustromProxyHandler<T>
 export type ProxySetter<T> = CustromProxyHandler<T> & { newValue: any }
 
-const isSpecificType = (value: unknown) => {
-  return targetType.includes(getRawType(value)) && Object.isExtensible(value)
+export const specialType = [
+  'Object',
+  'Array',
+  'Map',
+  'Set',
+  'WeakMap',
+  'WeakSet'
+]
+
+export const isReadonly = (value: unknown) => {
+  return !!(value && (value as Target)[ReactiveFlags.IS_READONLY])
+}
+const isSpecialType = (value: unknown) => {
+  return specialType.includes(getRawType(value)) && Object.isExtensible(value)
 }
 
 const targetMap = new WeakMap()
 const proxyMap = new WeakMap()
-const targetType = ['Object', 'Array', 'Map', 'Set', 'WeakMap', 'WeakSet']
 
 export function createProxy<T>(
   target: T,
@@ -51,12 +62,16 @@ export function createProxy(
     )
     return target
   }
-  if (!isSpecificType(target)) {
+  if (!isSpecialType(target)) {
     console.warn(
       `[Meiko warn]: only specific value types can be observed: ${String(
         target
       )}`
     )
+    return target
+  }
+  // if target is a readonly proxy, it will be returned directly without observation.
+  if (isReadonly(target)) {
     return target
   }
   // target is already a Proxy, return it.
@@ -65,11 +80,10 @@ export function createProxy(
   }
   // target already has corresponding Proxy
   if (!targetMap.has(target)) {
-    const { isReactive, isReadOnly } = context
+    const { isReactive, isReadOnly: readOnlyFlag } = context
     const proxy = new Proxy(target, handler)
 
-    defReadOnlyProp(target, ReactiveFlags.RAW, true)
-    defReadOnlyProp(proxy, ReactiveFlags.IS_READONLY, isReadOnly)
+    defReadOnlyProp(proxy, ReactiveFlags.IS_READONLY, readOnlyFlag)
     defReadOnlyProp(proxy, ReactiveFlags.IS_REACTIVE, isReactive)
 
     targetMap.set(target, proxy)
