@@ -21,6 +21,8 @@ export const RT_DCB = '}}'
 /**插值表达式钦定的标签名 */
 export const INTERP_HTML_TAGNAME = 'meiko-value'
 
+export const MEMO_VALUE_PROP = 'state'
+
 export const enum ESCAPE_HTML {
   lt = '&lt;', // <
   gt = '&gt;', // >
