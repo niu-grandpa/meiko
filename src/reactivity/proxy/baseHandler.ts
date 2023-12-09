@@ -1,19 +1,15 @@
-import { defProp } from '@/helper'
+import { defProp, getRawType } from '@/helper'
 import { isEqual, isFunction, isObject } from '@/helper/equal'
 import { domDepNotify } from '@/reactivity/notify'
-import { ReactiveFlags } from '@/shared/const'
 import {
   ProxyContext,
   ProxyGetter,
   ProxyKey,
   ProxySetter,
-  Target,
-  createProxy
+  createProxy,
+  specialType
 } from '.'
 
-export const isReadonly = (value: unknown) => {
-  return !!(value && (value as Target)[ReactiveFlags.IS_READONLY])
-}
 export const initAccessKey = (context: ProxyContext, str: string) => {
   context.accessKey = `${str}.`
 }
@@ -27,7 +23,7 @@ export function proxyGetter(params: ProxyGetter<object>) {
 
   setAccessKey(context, prop)
   // get Map、Set、WeakMap and other special types of size
-  if (prop === 'size') {
+  if (prop === 'size' && specialType.includes(getRawType(target))) {
     return Reflect.get(target, prop, target)
   }
   const value = Reflect.get(target, prop, receiver)
