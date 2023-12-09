@@ -1,6 +1,5 @@
 import { isFunction } from '@/helper/equal'
 import { createProxy, ProxyContext } from './proxy'
-import { isReadonly } from './proxy/baseHandler'
 import normalHandler from './proxy/normalHandler'
 
 /**
@@ -25,10 +24,6 @@ export function createModel(name: string, state: () => object) {
     return state
   }
   const target = state()
-  // if target is a readonly proxy, it will be returned directly without observation.
-  if (isReadonly(target)) {
-    return target
-  }
   const context: ProxyContext = {
     accessKey: name + '.',
     isReadOnly: false,
