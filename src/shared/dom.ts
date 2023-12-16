@@ -97,6 +97,13 @@ export function getElemById(id: string): HTMLElement | null {
   return document.getElementById(id)
 }
 
+export function getElemByDataset(
+  key: string,
+  value: string
+): HTMLElement | null {
+  return querySelector(`[${key}="${value}"]`)
+}
+
 export function getDataset(
   element: HTMLElement,
   attributeName: string
