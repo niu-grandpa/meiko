@@ -5,7 +5,7 @@ import {
   RT_SCB,
   START_TAG,
   WHITE_SPACE
-} from '@/shared/const'
+} from '@/shared/constant/htmlToken'
 
 export function isEqSTN(value: string) {
   return value === START_TAG
@@ -39,7 +39,7 @@ export function isUndef(value: any): value is undefined {
   return typeof value === 'undefined'
 }
 
-export function isArray(value: any): value is [] {
+export function isArray(value: any): value is any[] {
   return Array.isArray(value)
 }
 
