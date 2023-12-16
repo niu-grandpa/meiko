@@ -1,6 +1,6 @@
 import { defReadOnlyProp, getRawType } from '@/helper'
 import { isObject } from '@/helper/equal'
-import { ReactiveFlags } from '@/shared/const'
+import { ReactiveFlags } from '@/shared/constant/reactive'
 
 export interface Target {
   [ReactiveFlags.SKIP]?: boolean
