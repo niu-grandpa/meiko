@@ -8,5 +8,5 @@ export default function checkSize(arr: string[]): string {
       size += 8
     }
   })
-  return (!size ? 0 : (size / 1024).toFixed(2)) + ' kb'
+  return (!size ? 0 : ~~(size / 1024).toFixed(2)) + ' kb'
 }
