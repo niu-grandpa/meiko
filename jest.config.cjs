@@ -5,16 +5,16 @@ module.exports = {
   collectCoverage: true,
   clearMocks: true,
   coverageDirectory: 'coverage',
-  transform: {
-    '^.+\\.ts?$': 'ts-jest'
-  },
   testRegex: '(/__tests__/.*|(\\.|/)(test|spec))\\.ts$',
   moduleNameMapper: {
     '^@/(.*)$': '<rootDir>/src/$1'
   },
-  globals: {
-    'ts-jest': {
-      tsconfig: 'tsconfig.json'
-    }
+  // globals: {
+  //   'ts-jest': {
+  //     tsconfig: 'tsconfig.json'
+  //   }
+  // },
+  transform: {
+    '^.+\\.tsx?$': ['ts-jest', { tsconfig: 'tsconfig.json' }]
   }
 }
