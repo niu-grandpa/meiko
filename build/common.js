@@ -23,6 +23,7 @@ const mergeConfig = (config1, config2) => {
 
 const baseConfig = {
   input: 'src/index.ts',
+  external: ['picocolors', 'quick-hash'],
   plugins: [
     commonjs(),
     resolve(),
@@ -35,7 +36,7 @@ const baseConfig = {
 }
 
 module.exports = {
-  createOutput: createOutput,
-  mergeConfig: mergeConfig,
-  baseConfig: baseConfig
+  createOutput,
+  mergeConfig,
+  baseConfig
 }
