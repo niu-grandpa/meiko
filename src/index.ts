@@ -1,1 +1,1 @@
-export { compileFunction } from '@/compiler'
+export { compileFunction as meikoCompiler } from '@/compiler'

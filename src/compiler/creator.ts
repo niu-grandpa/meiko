@@ -1,23 +1,31 @@
-import { parseHtml } from '@/parser'
-import checkSize from './sizeCheck'
-import { Compiler, CompilerContext } from './types'
+import { transform } from '@/transform'
+import { extractScriptContent } from './shared'
+import { CompileResult } from './types/compileResult'
+import { CompilerContext } from './types/compilerContext'
 
-export function createCompiler(): Compiler {
-  const context = createContext()
-  const compilerFn = (html: string): CompilerContext => {
-    context.source = html.trim()
-    parseHtml(context)
-    context.size = checkSize(context.result)
-    return context
-  }
-  return compilerFn
-}
+export type Compiler = (html: string) => CompileResult
 
-function createContext(): CompilerContext {
-  return {
+export function compileCreator(): Compiler {
+  const createRtObj = (): CompilerContext['runtime'] => ({ domEvent: [] })
+
+  const createContext = (): CompilerContext => ({
     stack: [],
-    result: [],
+    tokens: [],
     source: '',
-    size: '0'
+    runtime: createRtObj()
+  })
+
+  return function (html: string) {
+    const context = createContext()
+    const { cleanedStr, internalScript } = extractScriptContent(html)
+
+    context.source = cleanedStr
+
+    return {
+      filepath: '',
+      internalScript,
+      html: transform(context),
+      runtime: context.runtime
+    }
   }
 }

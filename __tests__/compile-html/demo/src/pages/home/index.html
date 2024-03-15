@@ -1,0 +1,29 @@
+<script>
+  const el = document.querySelector('#app')
+  const div = document.createElement('div')
+  const btn = document.querySelector('button')
+  const handler = e => {
+    console.log('click event ', e)
+    alert('I am a button!')
+  }
+  btn.addEventListener('click', handler)
+
+  div.style.width = 200
+  div.style.height = 100
+  div.style.border = '1px solid'
+
+  el.appendChild(div)
+
+  const handler2 = e => {
+    console.log('click event ', e)
+    alert('I am a div!')
+  }
+  div.addEventListener('click', handler2)
+</script>
+
+<button>click me</button>
+<div id="app"></div>
+
+<style less>
+
+</style>

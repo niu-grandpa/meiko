@@ -23,15 +23,15 @@ const mergeConfig = (config1, config2) => {
 
 const baseConfig = {
   input: 'src/index.ts',
-  external: ['picocolors', 'quick-hash'],
+  external: [],
   plugins: [
+    nodePolyfills(),
     commonjs(),
     resolve(),
-    babel({ exclude: 'node_modules/**', babelHelpers: 'bundled' }),
     typescript(),
     alias({ entries: [{ find: '@', replacement: './src' }] }),
-    json(),
-    nodePolyfills()
+    babel({ exclude: 'node_modules/**', babelHelpers: 'bundled' }),
+    json()
   ]
 }
 
